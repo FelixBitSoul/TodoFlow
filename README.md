@@ -1,4 +1,4 @@
-# My React App
+# TodoFlow
 
 一个基于 React + Vite 的现代化待办事项应用，集成 Supabase 后端和用户认证功能。
 
@@ -96,12 +96,12 @@ src/
 
 ## 📝 命令参考
 
-| 命令 | 说明 |
-|------|------|
-| `npm run dev` | 启动开发服务器 |
-| `npm run build` | 构建生产版本 |
-| `npm run preview` | 预览生产构建 |
-| `npm run lint` | 运行 ESLint 检查 |
+| 命令              | 说明             |
+| ----------------- | ---------------- |
+| `npm run dev`     | 启动开发服务器   |
+| `npm run build`   | 构建生产版本     |
+| `npm run preview` | 预览生产构建     |
+| `npm run lint`    | 运行 ESLint 检查 |
 
 ## 🤝 贡献
 
