@@ -1,39 +1,39 @@
-function App() {
+import { useEffect, useState } from 'react'
+import { supabase } from './lib/supabase'
+import Auth from './components/Auth'
+import TodoList from './components/TodoList' // 之前的业务代码封装
+import { Button } from "@/components/ui/button"
+import { LogOut } from "lucide-react"
+
+export default function App() {
+  const [session, setSession] = useState(null)
+
+  useEffect(() => {
+    // 检查当前是否有会话
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session)
+    })
+
+    // 监听登录状态变化（登录、登出、密码修改等）
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+
+    return () => subscription.unsubscribe()
+  }, [])
+
+  if (!session) {
+    return <Auth />
+  }
+
   return (
-    // bg-gray-100: 背景灰; min-h-screen: 最小高度占满全屏; py-10: 上下内边距
-    <div className="min-h-screen bg-gray-100 py-10 px-4">
-
-      {/* max-w-md: 最大宽度; mx-auto: 水平居中; shadow-lg: 大阴影; rounded-xl: 超圆角 */}
-      <div className="max-w-md mx-auto bg-white shadow-2xl rounded-2xl p-8">
-        
-        <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
-          我的待办 📝
-        </h2>
-
-        <div className="flex gap-2 mb-6">
-          {/* 给输入框加聚焦光晕：className="border-2 border-gray-100 focus:border-blue-500
-           focus:ring-4 focus:ring-blue-500/20 outline-none transition-all" */}
-          <input 
-            type="text" 
-            className="flex-1 border-2 border-gray-100 focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 outline-none transition-all"
-            placeholder="新任务..."
-          />
-          {/* className="bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all text-white px-4 py-2 rounded-lg */}
-          <button className="bg-blue-600 hover:bg-blue-700 active:scale-95 transition-all text-white px-4 py-2 rounded-lg">
-            添加
-          </button>
-        </div>
-
-        {/* 列表部分 */}
-        <ul className="space-y-3">
-          <li className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-all">
-            <span className="text-gray-700">学习 Tailwind</span>
-            <button className="text-red-400 hover:text-red-600 text-sm">删除</button>
-          </li>
-        </ul>
+    <div className="min-h-screen bg-background p-4">
+      <div className="max-w-md mx-auto flex justify-end mb-4">
+        <Button variant="outline" size="sm" onClick={() => supabase.auth.signOut()}>
+          <LogOut className="mr-2 h-4 w-4" /> 退出登录
+        </Button>
       </div>
+      <TodoList />
     </div>
-  );
+  )
 }
-
-export default App;
